@@ -7,8 +7,11 @@ strings and accessibility labels belong in the English/German catalog at
 
 The shared scheme is `TravelFrames` in `src/TravelFrames.xcodeproj`.
 App sources are under `src/TravelFrames`; unit/UI tests are under `tests`.
-Run the same checks as CI with `bash scripts/test.sh iPhone` and
-`bash scripts/test.sh iPad`. See `docs/Development.md` for toolchain setup.
+CI runs `xcodebuild test -project src/TravelFrames.xcodeproj -scheme TravelFrames
+-destination 'platform=iOS Simulator,name=iPhone 17,OS=latest'
+CODE_SIGNING_ALLOWED=NO`. Run additional local bundle-identifier and device checks
+with `bash scripts/test.sh iPhone` and `bash scripts/test.sh iPad`.
+See `docs/Development.md` for toolchain setup.
 
 `DraftSession` is the authoritative owner of the in-memory draft identity and
 selected tool. Views own presentation state such as inspector expansion.
