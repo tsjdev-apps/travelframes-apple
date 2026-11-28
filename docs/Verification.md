@@ -1,5 +1,12 @@
 # Phase 1 verification — 2026-11-28
 
+The results below record the original device-matrix verification. CI has since
+been aligned with Image Sortr: one `Build and Test` job runs both test targets
+through a direct `xcodebuild test` on iPhone 17, with Xcode's default scheduling.
+The extended phone/tablet script remains available locally. See
+`docs/Development.md` for the current PR command; hosted timing must be measured
+on the next pull request.
+
 ## Implementation
 
 The production path is overview → New Collage → blank editor → native Back.

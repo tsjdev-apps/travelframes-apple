@@ -16,11 +16,27 @@ export DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer
 xcodebuild -list -project src/TravelFrames.xcodeproj
 xcodebuild -showdestinations -project src/TravelFrames.xcodeproj -scheme TravelFrames
 xcrun simctl list devices available
+xcodebuild test -project src/TravelFrames.xcodeproj -scheme TravelFrames \
+  -destination 'platform=iOS Simulator,name=iPhone 17,OS=latest' \
+  CODE_SIGNING_ALLOWED=NO
+```
+
+The `Build and Test` job follows Image Sortr: one macOS job, a checkout and a
+direct unsigned `xcodebuild test` on iPhone 17 with the latest installed runtime.
+It runs both unit and UI test targets and fails when xcodebuild fails. The job
+runs for pull requests targeting `main` and has a 20-minute timeout. Xcode uses
+its default test scheduling; CI does not duplicate the suite across a device
+matrix or upload result bundles. Results remain available in the Xcode build
+logs. Hosted execution and timing must be checked on the next pull request.
+
+## Additional local checks
+
+```sh
 bash scripts/test.sh iPhone
 bash scripts/test.sh iPad
 ```
 
-The script checks the resolved main-app bundle identifier in both configurations,
+The local script checks the resolved main-app bundle identifier in both configurations,
 then builds and runs both test targets. It selects an available simulator running
 iOS 26 or later, preferring an iPad mini for tablet tests. Select an explicit
 installed destination with:
@@ -29,7 +45,7 @@ installed destination with:
 SIMULATOR_ID='<available-UDID>' bash scripts/test.sh
 ```
 
-The equivalent test command is:
+The local script's equivalent test command is:
 
 ```sh
 xcodebuild test -project src/TravelFrames.xcodeproj -scheme TravelFrames \
@@ -37,10 +53,8 @@ xcodebuild test -project src/TravelFrames.xcodeproj -scheme TravelFrames \
   -parallel-testing-enabled NO CODE_SIGNING_ALLOWED=NO
 ```
 
-The `Build and Test` workflow uses a macOS runner and the same script for phone
-and tablet destinations. It propagates the xcodebuild exit status, including
-test failures, and uploads result bundles even after a failed test. Local result
-bundles are in the ignored `build/` directory. If no suitable runtime exists,
+The script propagates the xcodebuild exit status, including test failures.
+Local result bundles are in the ignored `build/` directory. If no suitable runtime exists,
 the script fails with an installation hint; install one in Xcode Settings >
 Components and rerun. No test accesses Photos, Files, a network or an account.
 
