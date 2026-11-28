@@ -1,0 +1,29 @@
+name: Build and Test
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    name: Build and Test (${{ matrix.device }})
+    runs-on: macos-26
+    strategy:
+      fail-fast: false
+      matrix:
+        device: [iPhone, iPad]
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build and test shared scheme
+        run: bash scripts/test.sh "${{ matrix.device }}"
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-results-${{ matrix.device }}
+          path: build/*.xcresult
+          if-no-files-found: warn
