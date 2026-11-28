@@ -1,0 +1,26 @@
+name: Build and Test
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    runs-on: macos-26
+    timeout-minutes: 20
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+
+      - name: Build and run tests
+        run: >-
+          xcodebuild test
+          -project src/TravelFrames.xcodeproj
+          -scheme TravelFrames
+          -destination 'platform=iOS Simulator,name=iPhone 17,OS=latest'
+          CODE_SIGNING_ALLOWED=NO
