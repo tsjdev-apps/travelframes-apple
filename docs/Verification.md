@@ -7,6 +7,14 @@ The extended phone/tablet script remains available locally. See
 `docs/Development.md` for the current PR command; hosted timing must be measured
 on the next pull request.
 
+The simplified CI command was executed locally on 2026-11-28 with Xcode 27.2
+and the iPhone 17 / iOS 27.2 simulator: **3 unit tests and 3 UI tests passed,
+zero failures** (`TEST SUCCEEDED`). The UI cases took approximately 42 seconds;
+Xcode reported approximately 103 seconds for the test operation including
+simulator/runner startup. This is not a hosted CI timing comparison. YAML was
+parsed and compared with the local Image Sortr workflow, allowing only the
+workflow name and TravelFrames project/scheme substitutions; it matched.
+
 ## Implementation
 
 The production path is overview → New Collage → blank editor → native Back.
